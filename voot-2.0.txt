@@ -1,0 +1,336 @@
+
+
+
+Network Working Group                                 LJ. Johansson, Ed.
+Internet-Draft                                              NORDUNet A/S
+Intended status: Experimental                     AS. Aekre Solberg, Ed.
+Expires: June 8, 2012                                            UNINETT
+                                                        December 6, 2011
+
+
+                           The VOOT Protocol
+                         draft-gn3-jra3-t2-voot
+
+Abstract
+
+   The VOOT (Virtual Organization Orthogonal Technology) protocol is a
+   subset of OpenSocial used to manage group membership.  The primary
+   motivation for VOOT is as a simple tool for managing virtual
+   organization in R&E federations.
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on June 8, 2012.
+
+Copyright Notice
+
+   Copyright (c) 2011 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+Johansson & Aekre Solberg  Expires June 8, 2012                 [Page 1]
+
+Internet-Draft                    VOOT                     December 2011
+
+
+   This document may contain material from IETF Documents or IETF
+   Contributions published or made publicly available before November
+   10, 2008.  The person(s) controlling the copyright in some of this
+   material may not have granted the IETF Trust the right to allow
+   modifications of such material outside the IETF Standards Process.
+   Without obtaining an adequate license from the person(s) controlling
+   the copyright in such materials, this document may not be modified
+   outside the IETF Standards Process, and derivative works of it may
+   not be created outside the IETF Standards Process, except to format
+   it for publication as an RFC or to translate it into languages other
+   than English.
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . . . 3
+     1.1.  Requirements Language . . . . . . . . . . . . . . . . . . . 3
+     1.2.  Motivation  . . . . . . . . . . . . . . . . . . . . . . . . 3
+   2.  VOOT 2.0 API and Datamodels . . . . . . . . . . . . . . . . . . 3
+     2.1.  VOOT Core API Server Specification  . . . . . . . . . . . . 3
+     2.2.  VOOT Social API Server Specification  . . . . . . . . . . . 4
+       2.2.1.  Get a Person  . . . . . . . . . . . . . . . . . . . . . 5
+       2.2.2.  Get a list of People  . . . . . . . . . . . . . . . . . 5
+       2.2.3.  Get Activity Streams  . . . . . . . . . . . . . . . . . 5
+       2.2.4.  Create an ActivityEntry . . . . . . . . . . . . . . . . 5
+     2.3.  VOOT Social Data Specification  . . . . . . . . . . . . . . 5
+     2.4.  Extensions  . . . . . . . . . . . . . . . . . . . . . . . . 6
+   3.  VOOT 2.0 Metadata and Discovery . . . . . . . . . . . . . . . . 6
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . . . 6
+   5.  Normative References  . . . . . . . . . . . . . . . . . . . . . 6
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Johansson & Aekre Solberg  Expires June 8, 2012                 [Page 2]
+
+Internet-Draft                    VOOT                     December 2011
+
+
+1.  Introduction
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+1.2.  Motivation
+
+   VOOT 2.0 is a very simple protocol for cross-domain read-access to
+   groups.  The current version (2.0) is a profile of OpenSocial 2.0.1.
+
+   TODO - motivational text on VOs and the need for standardized group
+   membership access protocols.
+
+
+2.  VOOT 2.0 API and Datamodels
+
+   VOOT 2.0 is a profile of OpenSocial 2.0.1.  The following sections
+   describe the mandatory to implement subset of OpenSocial 2.0.1 in
+   relation to the corresponding document of the OpenSocial 2.0.1
+   specification set.  A VOOT provider is a subset of the functionality
+   of an OpenSocial Core and Social APIs.  In particular a VOOT provider
+   does not have to implement any part of the container specification or
+   the gadget APIs.
+
+   Support for non-read-only operations (such as content upload, group
+   creation etc) is OPTIONAL unless otherwize stated.  In places where
+   OpenSocial mandates support for write operations (eg creation of
+   ActivityEntries) VOOT stipulates null operations to simulate write-
+   operations.
+
+2.1.  VOOT Core API Server Specification
+
+   A VOOT provider MUST implement the REST protocol with JSON format.  A
+   VOOT client SHOULD use REST with JSON format payloads.  All other
+   formats and protocols are OPTIONAL with one exception: a VOOT
+   provider MUST implement the System service using the RPC protocol as
+   this is part of the OpenSocial discovery mechanism which is fully
+   supported by VOOT.
+
+   NOTE: The OpenSocial specification stipulates than an OpenSocial
+   container MUST support JSON and ATOM for all resources and JSON, ATOM
+   and XML for the people resources.  Anticipating future development in
+   this area VOOT clients MUST only use JSON and REST where applicable
+   and SHOULD NOT call the RPC System service (instead XRD discovery
+   SHOULD be used).
+
+
+
+Johansson & Aekre Solberg  Expires June 8, 2012                 [Page 3]
+
+Internet-Draft                    VOOT                     December 2011
+
+
+   A VOOT provider MUST support authorization using OAuth 2.0 and OAuth
+   1.0a in accordance with the OpenSocial specification.
+
+   A VOOT provider MUST implement the standard request parameters from
+   section 6 of the OpenSocial 2.0 Core API Server Specification.  This
+   includes:
+
+   o  updateSince
+
+   o  format
+
+   and for calls that return collections the following request
+   parameters MUST be supported.
+
+   o  count
+
+   o  filterBy
+
+   o  filterOp
+
+   o  filterValute
+
+   o  sortOrder
+
+   o  startIndex
+
+   All VOOT providers MUST support XRD-based Discovery as described in
+   section 7 of the OpenSocial 2.0 Core API Server S pecification.  An
+   example System request and response given the mandatory to implement
+   features in VOOT: (TODO)
+
+2.2.  VOOT Social API Server Specification
+
+   A VOOT provider SHOULD return only single-page responses. - leifj: is
+   this reasonable?
+
+   The minimal VOOT mandatory to implement set of social services is:
+
+   o  Get a Person [2.1.1.1]
+
+   o  Get a list of People [2.1.1.2]
+
+   o  Get Activity Streams [2.3.1]
+
+   o  Create an ActivityEntry [2.3.2]
+
+
+
+
+
+
+Johansson & Aekre Solberg  Expires June 8, 2012                 [Page 4]
+
+Internet-Draft                    VOOT                     December 2011
+
+
+2.2.1.  Get a Person
+
+   A VOOT provider MUST implement the get person call over REST.  This
+   is an HTTP GET to /people/<userId> that MUST return a single Person
+   object encoded as JSON.
+
+   In order to preserve the anonymity of VOOT users a VOOT provider MAY
+   return a constant value for displayName.
+
+2.2.2.  Get a list of People
+
+   A VOOT provider MUST support listing members of a group using HTTP
+   GET to /people/@me/<groupId>.  Each member of the returned OpenSocial
+   Collection MUST be a Person object with at least the 'id' and
+   'displayName' attribute.
+
+2.2.3.  Get Activity Streams
+
+   TODO
+
+2.2.4.  Create an ActivityEntry
+
+   TODO
+
+2.3.  VOOT Social Data Specification
+
+   A VOOT provider MUST support for Group and Person and SHOULD support
+   the ActivityEntry (used in ActivityStreams) object.  The OpenSocial
+   specification mandates the use of the id and displayName fields.
+
+   The following are minimal requirements on Group and Person objects.
+
+   o  Person objects MUST contain at least the 'id' and 'displayName'
+      attribute.
+
+   o  Group objects MUST contain the 'id' and 'title' fields.
+
+   The 'id' field SHOULD be a 'Global-Id' type field on the form Domain-
+   Name ":" Local-Id.  The Domain-Name MUST uniquely and globally
+   identitfy the VOOT provider instance and SHOULD be based on part of
+   the VOOT provider instance hostname.  The VOOT client MUST NOT assume
+   that the Local-Id is part of a shared identifier namespace (eg an
+   email address) and MUST NOT assue that Local-Id can be used to
+   represent objects outside the scope of the given VOOT provider
+   instance.
+
+
+
+
+
+
+Johansson & Aekre Solberg  Expires June 8, 2012                 [Page 5]
+
+Internet-Draft                    VOOT                     December 2011
+
+
+2.4.  Extensions
+
+   TODO - describe where extensions can happen
+
+
+3.  VOOT 2.0 Metadata and Discovery
+
+   TODO
+
+
+4.  Security Considerations
+
+   Yeah probably...
+
+
+5.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+
+Authors' Addresses
+
+   Leif Johansson (editor)
+   NORDUNet A/S
+
+   Email: leifj@nordu.net
+
+
+   Andreas (editor)
+   UNINETT
+
+
+   Phone:
+   Fax:
+   Email: andreas.solberg@uninett.no
+   URI:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Johansson & Aekre Solberg  Expires June 8, 2012                 [Page 6]
+
