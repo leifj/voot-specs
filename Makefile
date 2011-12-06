@@ -6,7 +6,10 @@ publish: typeset
 	cp *.html ../docs/
 
 %.txt: %.xml
-	xml2rfc $@
+	xml2rfc $< $@
 
 %.html: %.xml
-	xml2rfc $@
+	xml2rfc $< $@
+
+clean:
+	rm *~ *.txt *.html
