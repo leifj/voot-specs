@@ -2,7 +2,7 @@ all: typeset
 
 typeset: voot-2.0.txt voot-2.0.html
 
-publish: typeset
+publish: clean typeset
 	cp *.html ../docs/
 
 %.txt: %.xml
