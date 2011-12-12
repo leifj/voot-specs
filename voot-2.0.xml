@@ -96,8 +96,8 @@
 
       <section title="Motivation">
         <t>VOOT 2.0 is a very simple protocol for cross-domain read-access to
-        groups. The current version (2.0) is a profile of OpenSocial
-        2.0.1.</t>
+        groups. The current version (2.0) is a profile of <xref target="OpenSocial-Specification">OpenSocial
+        2.0.1.</xref></t>
 
         <t>TODO - motivational text on VOs and the need for standardized group
         membership access protocols.</t>
@@ -215,7 +215,7 @@
 
         <t><list style="symbols">
             <t>Person objects MUST contain at least the 'id' and 'displayName'
-            attribute. </t>
+            attribute.</t>
 
             <t>Group objects MUST contain the 'id' and 'title' fields.</t>
           </list></t>
@@ -247,6 +247,20 @@
   <back>
     <references title="Normative References">
       <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
+    </references>
+    
+    
+    <references title="Informative References">
+	   <reference anchor="OpenSocial-Specification"
+              target="http://opensocial-resources.googlecode.com/svn/spec/2.0.1/OpenSocial-Specification.xml">
+    <front>
+     <title>OpenSocial Templating Specification</title>
+     <author fullname='OpenSocial and Gadgets Specification Group &lt;opensocial-and-gadgets-spec@googlegroups.com&gt;'>
+     </author>
+     <date month='August'
+           year='2011' />
+    </front>
+   </reference>
     </references>
   </back>
 </rfc>
