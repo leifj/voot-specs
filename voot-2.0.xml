@@ -91,13 +91,13 @@
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
         "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
         document are to be interpreted as described in <xref
-        target="RFC2119">RFC 2119</xref>.</t>
+        target="RFC2119">RFC 2119</xref> .</t>
       </section>
 
       <section title="Motivation">
         <t>VOOT 2.0 is a very simple protocol for cross-domain read-access to
-        groups. The current version (2.0) is a profile of <xref target="OpenSocial-Specification">OpenSocial
-        2.0.1.</xref></t>
+        groups. The current version (2.0) is a profile of <xref
+        target="OpenSocial-Specification">OpenSocial 2.0.1</xref> .</t>
 
         <t>TODO - motivational text on VOs and the need for standardized group
         membership access protocols.</t>
@@ -139,7 +139,7 @@
 
         <t>A VOOT provider MUST implement the standard request parameters from
         section 6 of the OpenSocial 2.0 Core API Server Specification. This
-        includes:<list style="symbols">
+        includes: <list style="symbols">
             <t>updateSince</t>
 
             <t>format</t>
@@ -159,7 +159,7 @@
           </list></t>
 
         <t>All VOOT providers MUST support XRD-based Discovery as described in
-        section 7 of the OpenSocial 2.0 Core API Server S pecification. An
+        section 7 of the OpenSocial 2.0 Core API Server Specification. An
         example System request and response given the mandatory to implement
         features in VOOT: (TODO)</t>
       </section>
@@ -168,15 +168,16 @@
         <t>A VOOT provider SHOULD return only single-page responses. - leifj:
         is this reasonable?</t>
 
-        <t>The minimal VOOT mandatory to implement set of social services
-        is:<list style="symbols">
-            <t>Get a Person [2.1.1.1]</t>
+        <t>The minimal VOOT mandatory to implement set of social services is:
+        <list style="symbols">
+            <t>Get a Person [OpenSocial Social API Server 2.1.1.1]</t>
 
-            <t>Get a list of People [2.1.1.2]</t>
+            <t>Get a list of People [OpenSocial Social Server API 2.1.1.2]</t>
 
-            <t>Get Activity Streams [2.3.1]</t>
+            <t>Get Activity Streams [OpenSocial Social Server API 2.3.1]</t>
 
-            <t>Create an ActivityEntry [2.3.2]</t>
+            <t>Create an ActivityEntry [OpenSocial Social Server API
+            2.3.2]</t>
           </list></t>
 
         <section title="Get a Person">
@@ -232,6 +233,74 @@
 
       <section title="Extensions">
         <t>TODO - describe where extensions can happen</t>
+
+        <t>THIS SECTION NEEDS MORE DISCUSSION, and will be updated</t>
+
+        <t>The namespace prefix 'voot_' is used for attributes defined in this
+        specification, that are not part of OpenSocial.</t>
+
+        <section title="VOOT Attributes">
+          <t>There may be VOOT attributes for both Person and Group objects;
+          but also for group membership. Attributes for group membership may
+          be merged into both Person and Group objects depending on the
+          protocol method used.</t>
+
+          <t>All VOOT specific membership attributes is prefixed with
+          'voot_memership_'.</t>
+		
+			<section title="isMemberOf">
+			<t>With 'isMemberOf', the membership attributes represents the
+          	current persons membership to each of the returned groups.</t>
+          	
+          	 <t>Example of group membership attributes to 'isMemberOf':</t>
+          	<t><figure><artwork>
+          	<![CDATA[   
+GET /groups/@me
+
+[
+    {
+        id: 'geant_identityfederations',
+        voot_membership_role: 'owner'
+    },
+    {
+        id: 'refeds',
+        voot_membership_role: 'member'
+    }
+]
+         	]]>
+          	</artwork></figure></t>
+          	</section>
+		
+			<section title="getGroupMembers">
+			<t>With 'getGroupMembers', the memership attributes represents the
+          	membership of the relevant group for each of the persons
+          	returned.</t>
+          	
+          	<t>Example of group membership attributes to 'getGroupMembers':</t>
+          	
+          	<t><figure><artwork>
+          	<![CDATA[         	
+GET /people/@me/geant_identityfederations
+
+[
+    {
+        displayName: 'Andreas Akre Solberg',
+        emails: ['andreas@uninett.no', 'andreas.solberg@uninett.no'],
+        voot_membership_role: 'admin'
+    },
+    {
+        displayName: 'Leif Johansson',
+        emails: ['leif@sunet.se'],
+        voot_membership_role: 'manager'
+    }
+]
+         	]]>
+          	
+          	</artwork></figure></t>
+			
+			</section>
+              
+        </section>
       </section>
     </section>
 
@@ -248,19 +317,18 @@
     <references title="Normative References">
       <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
     </references>
-    
-    
+
     <references title="Informative References">
-	   <reference anchor="OpenSocial-Specification"
-              target="http://opensocial-resources.googlecode.com/svn/spec/2.0.1/OpenSocial-Specification.xml">
-    <front>
-     <title>OpenSocial Templating Specification</title>
-     <author fullname='OpenSocial and Gadgets Specification Group &lt;opensocial-and-gadgets-spec@googlegroups.com&gt;'>
-     </author>
-     <date month='August'
-           year='2011' />
-    </front>
-   </reference>
+      <reference anchor="OpenSocial-Specification"
+                 target="http://opensocial-resources.googlecode.com/svn/spec/2.0.1/OpenSocial-Specification.xml">
+        <front>
+          <title>OpenSocial Templating Specification</title>
+
+          <author fullname="OpenSocial and Gadgets Specification Group &lt;opensocial-and-gadgets-spec@googlegroups.com&gt;"></author>
+
+          <date month="August" year="2011" />
+        </front>
+      </reference>
     </references>
   </back>
 </rfc>
